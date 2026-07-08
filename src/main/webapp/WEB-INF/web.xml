@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd" id="WebApp_ID" version="5.0">
+  <display-name>Food_Delivery</display-name>
+  
+  <welcome-file-list>
+    <welcome-file>topRestaurant</welcome-file>
+    <welcome-file>allRestaurant</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>index.xhtml</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.xhtml</welcome-file>
+  </welcome-file-list>
+  
+  
+  <servlet-mapping>
+  	<servlet-name>callLoginServlet</servlet-name>
+  	<url-pattern>/callingLoginServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>callLoginServlet</servlet-name>
+  	<servlet-class> com.foodDelivery.Servlets.LoginServlet </servlet-class>
+  </servlet>
+</web-app>

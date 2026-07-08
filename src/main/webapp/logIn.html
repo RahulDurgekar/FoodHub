@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in — FoodHub</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .auth-wrap {
+    min-height: calc(100vh - var(--nav-h));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
+  }
+  .auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 40px 36px;
+    box-shadow: 0 30px 60px -30px rgba(var(--shadow-color), 0.4);
+  }
+  .auth-card h1 { font-size: 1.7rem; }
+  .auth-card p.sub { color: var(--color-text-muted); margin-top: 6px; margin-bottom: 28px; font-size: 0.92rem; }
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; font-size: 0.82rem; font-weight: 700; margin-bottom: 6px; }
+  .form-group input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface-alt);
+    color: var(--color-text);
+    outline: none;
+    font-size: 0.92rem;
+    transition: border-color var(--transition-fast);
+  }
+  .form-group input:focus { border-color: var(--color-primary); }
+  .form-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; font-size: 0.82rem; }
+  .form-row a { color: var(--color-primary); font-weight: 700; }
+  .auth-card .btn { width: 100%; padding: 13px; }
+  .auth-switch { text-align: center; margin-top: 22px; font-size: 0.88rem; color: var(--color-text-muted); }
+  .auth-switch a { color: var(--color-primary); font-weight: 700; }
+  .auth-divider { display: flex; align-items: center; gap: 12px; margin: 26px 0; color: var(--color-text-muted); font-size: 0.8rem; }
+  .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--color-border); }
+</style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container">
+    <a href="index.html" class="logo">FoodHub<span class="dot">.</span></a>
+    <div style="margin-left:auto;">
+      <a href="index.html" class="btn btn-ghost btn-sm">Back to home</a>
+    </div>
+  </div>
+</header>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <span class="eyebrow">Welcome back</span>
+    <h1>Log in to FoodHub</h1>
+    <p class="sub">Track your orders and reorder your favourites in a tap.</p>
+
+    <!--
+      Point this form at your servlet's login endpoint, e.g.:
+      <form action="/FoodHub/login" method="POST">
+      The servlet can read request.getParameter("email") / "password".
+    -->
+    <form action="logIn" method="POST">
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" required>
+      </div>
+      <div class="form-row">
+        <label style="display:flex;align-items:center;gap:6px;font-weight:600;">
+          <input type="checkbox" name="remember" style="width:auto;"> Remember me
+        </label>
+        <a href="#">Forgot password?</a>
+      </div>
+      <button type="submit" class="btn btn-primary">Log in</button>
+    </form>
+
+    <div class="auth-divider">or</div>
+
+    <p class="auth-switch">New to FoodHub? <a href="signUp.html">Create an account</a></p>
+  </div>
+</div>
+
+</body>
+</html>
