@@ -28,6 +28,8 @@ public class UserDAOImpl implements UserDAO{
 			+ " phone=?, address=?, password=?, role=? WHERE userId=?";
 	
 	private static final String GET_ALL_USER="SELECT * FROM users";
+
+	private static final String GET_USER_BY_ID = "SELECT * from users where userId=?";
 	
 	@Override
 	public int addUser(User user) {
@@ -76,6 +78,39 @@ public class UserDAOImpl implements UserDAO{
         try{
         		PreparedStatement pstmt = conn.prepareStatement(GET_USER_BY_EMAIL);
         		pstmt.setString(1, email);
+        		ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                user = new User(
+                			rs.getInt("userId"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getLong("phone"),
+                        rs.getString("address"),
+                        rs.getString("password"),
+                        rs.getString("role")
+                );
+            }
+            
+            if(user.getEmail()==null) {
+            		System.out.print("User not found");
+            }
+            
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return user;
+    }
+	
+	@Override
+	public User getUserById(int userId) {
+		User user = null;
+		Connection conn=DBConnection.getConnection();
+        try{
+        		PreparedStatement pstmt = conn.prepareStatement(GET_USER_BY_ID);
+        		pstmt.setInt(1, userId);
         		ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {

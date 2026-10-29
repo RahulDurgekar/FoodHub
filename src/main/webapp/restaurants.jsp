@@ -33,7 +33,7 @@ List<Restaurant> restaurants = (List<Restaurant>) request.getAttribute("allResta
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v18"/><path d="M4 3c2 0 3 1.5 3 3.5S6 10 4 10"/><path d="M15 3v18"/><path d="M20 3v7a3 3 0 0 1-3 3"/><path d="M20 3v18"/></svg>
         Browse Restaurants
       </a>
-      <a href="orders.html">
+      <a href="userProfile">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h5"/></svg>
         Orders
       </a>
@@ -55,9 +55,8 @@ List<Restaurant> restaurants = (List<Restaurant>) request.getAttribute("allResta
         </span>
       </button>
 
-      <a href="cart.html" class="icon-btn" aria-label="Cart">
+      <a href="cart.jsp" class="icon-btn" aria-label="Cart">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M1 1h4l2.2 12.2a2 2 0 0 0 2 1.8h8.6a2 2 0 0 0 2-1.6L22 6H6"/></svg>
-        <span class="cart-count">2</span>
       </a>
 
       <div class="profile-wrap" id="profileWrap">
@@ -76,12 +75,12 @@ List<Restaurant> restaurants = (List<Restaurant>) request.getAttribute("allResta
         <span><%= user.getRole() %></span>
     </div>
 
-    <a href="updateUser.jsp">
+    <a href="userProfile">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 20h9"/>
-            <path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/>
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/>
         </svg>
-        Update Profile
+        Profile
     </a>
 
     <a href="LogOutServlet">
@@ -132,16 +131,15 @@ List<Restaurant> restaurants = (List<Restaurant>) request.getAttribute("allResta
 </header>
 
 <!-- mobile drawer -->
-<div class="mobile-menu" id="mobileMenu">
+<div class="mobile-menu" id="mobileMenu" style="display:none;">
   <div class="mobile-menu-panel">
     <button class="mobile-close" id="mobileClose" aria-label="Close menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
     <a href="topRestaurant">Home</a>
     <a href="allRestaurants">Browse Restaurants</a>
-    <a href="orders.html">Orders</a>
-    <a href="delivery.html">Delivery</a>
-    <a href="cart.html">Cart</a>
+    <a href="userProfile">Orders</a>
+    <a href="cart.jsp">Cart</a>
     <a href="logIn.html">Log in</a>
     <a href="signUp.html">Sign up</a>
   </div>
@@ -197,31 +195,38 @@ List<Restaurant> restaurants = (List<Restaurant>) request.getAttribute("allResta
         "linear-gradient(135deg,#4f8cff,#8ab6ff)",
         "linear-gradient(135deg,#a855f7,#d8b4fe)"
     };
+
     int i = 0;
     for (Restaurant restaurant : restaurants) {
         boolean open = restaurant.isActive();
         String gradient = gradients[i % gradients.length];
         i++;
 %>
-      <a href="viewRestaurant.jsp?id= <%= restaurant.getRestaurantId() %>" class="rest-card" style="display:block;">
-        <div class="rest-thumb" style="background:<%= gradient %>;">
+
+      <a href="menuServlet?restaurantId=<%= restaurant.getRestaurantId() %>" class="rest-card" style="display:block;">
+      
+        <div class="rest-thumb" data-img="<%= request.getContextPath() + "/" + restaurant.getImagePath() %>">
+        
           <span class="badge"><%= open ? "Open" : "Closed" %></span>
           <span class="fav"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></span>
           <span class="time-pill"><%= restaurant.getDeliveryTime() %> min</span>
         </div>
+        
         <div class="rest-perf"></div>
         <div class="rest-body">
-          <h3><%= restaurant.getName() %></h3>
+          <div class="rest-name-row">
+            <h3><%= restaurant.getName() %></h3>
+            <span class="rating-badge"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.9L5.8 21l1.6-7L2 9.2l7.1-.6z"/></svg><%= restaurant.getRating() %></span>
+          </div>
           <div class="rest-meta">
-            <span class="rating"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.9L5.8 21l1.6-7L2 9.2l7.1-.6z"/></svg> <%= restaurant.getRating() %></span>
             <span>· <%= restaurant.getCuisineType() %></span>
           </div>
           <div class="rest-tags"><%= restaurant.getAddress() %></div>
           <div class="rest-footer">
-            <span class="cost">₹300 for two</span>
-            <span class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            <span class="cost">View Restaurant</span>
           </div>
         </div>
+        
       </a>
 <%
     }
@@ -258,8 +263,8 @@ List<Restaurant> restaurants = (List<Restaurant>) request.getAttribute("allResta
         <h4>For you</h4>
         <ul>
           <li><a href="allRestaurants">Browse restaurants</a></li>
-          <li><a href="orders.html">Your orders</a></li>
-          <li><a href="cart.html">Your cart</a></li>
+          <li><a href="userProfile">Your orders</a></li>
+          <li><a href="cart.jsp">Your cart</a></li>
         </ul>
       </div>
       <div>
@@ -311,9 +316,30 @@ List<Restaurant> restaurants = (List<Restaurant>) request.getAttribute("allResta
 
   // ---- Mobile menu ----
   const mobileMenu = document.getElementById('mobileMenu');
-  document.getElementById('mobileOpen').addEventListener('click', () => mobileMenu.classList.add('open'));
+  document.getElementById('mobileOpen').addEventListener('click', () => {
+    mobileMenu.style.display = '';
+    mobileMenu.classList.add('open');
+  });
   document.getElementById('mobileClose').addEventListener('click', () => mobileMenu.classList.remove('open'));
   mobileMenu.addEventListener('click', (e) => { if (e.target === mobileMenu) mobileMenu.classList.remove('open'); });
+
+  // ---- Set background images from data-img, with a graceful fallback
+  //      if the file 404s or the browser can't decode the format ----
+  const FALLBACK_GRADIENTS = [
+    'linear-gradient(135deg,#ffb627,#ff5a1f)',
+    'linear-gradient(135deg,#3fa34d,#8bd17c)',
+    'linear-gradient(135deg,#e5484d,#ff8a80)',
+    'linear-gradient(135deg,#4f8cff,#8ab6ff)',
+    'linear-gradient(135deg,#a855f7,#d8b4fe)'
+  ];
+  document.querySelectorAll('.rest-thumb[data-img]').forEach((el, idx) => {
+    const raw = el.getAttribute('data-img');
+    const encoded = raw.replace(/\\/g, '/').split('/').map(s => encodeURIComponent(s)).join('/');
+    const preload = new Image();
+    preload.onload = () => { el.style.backgroundImage = 'url("' + encoded + '")'; };
+    preload.onerror = () => { el.style.backgroundImage = FALLBACK_GRADIENTS[idx % FALLBACK_GRADIENTS.length]; };
+    preload.src = encoded;
+  });
 </script>
 </body>
 </html>

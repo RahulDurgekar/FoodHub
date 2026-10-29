@@ -1,6 +1,7 @@
 <%@ page import="com.foodDelivery.model.User ,com.foodDelivery.model.Restaurant, java.util.*" %>
 <%
 User user = (User)session.getAttribute("loggedUser");
+
 List<Restaurant> restaurants = (List<Restaurant>)request.getAttribute("topThreeRestaurant");
 %>
 
@@ -33,7 +34,7 @@ List<Restaurant> restaurants = (List<Restaurant>)request.getAttribute("topThreeR
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v18"/><path d="M4 3c2 0 3 1.5 3 3.5S6 10 4 10"/><path d="M15 3v18"/><path d="M20 3v7a3 3 0 0 1-3 3"/><path d="M20 3v18"/></svg>
         Browse Restaurants
       </a>
-      <a href="orders.html">
+      <a href="userProfile">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h5"/></svg>
         Orders
       </a>
@@ -55,9 +56,8 @@ List<Restaurant> restaurants = (List<Restaurant>)request.getAttribute("topThreeR
         </span>
       </button>
 
-      <a href="cart.html" class="icon-btn" aria-label="Cart">
+      <a href="cart.jsp" class="icon-btn" aria-label="Cart">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M1 1h4l2.2 12.2a2 2 0 0 0 2 1.8h8.6a2 2 0 0 0 2-1.6L22 6H6"/></svg>
-        <span class="cart-count">2</span>
       </a>
 
       <div class="profile-wrap" id="profileWrap">
@@ -83,13 +83,13 @@ List<Restaurant> restaurants = (List<Restaurant>)request.getAttribute("topThreeR
         </span>
     </div>
 
-    <a href="updateUser.jsp">
+    <a href="userProfile.jsp" methos="post">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2"
              stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 20h9"/>
-            <path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/>
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/>
         </svg>
-        Update Profile
+        Profile
     </a>
 
     <a href="LogOutServlet">
@@ -150,16 +150,15 @@ List<Restaurant> restaurants = (List<Restaurant>)request.getAttribute("topThreeR
 </header>
 
 <!-- mobile drawer -->
-<div class="mobile-menu" id="mobileMenu">
+<div class="mobile-menu" id="mobileMenu" style="display:none;">
   <div class="mobile-menu-panel">
     <button class="mobile-close" id="mobileClose" aria-label="Close menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
     <a href="topRestaurant">Home</a>
     <a href="allRestaurants">Browse Restaurants</a>
-    <a href="orders.html">Orders</a>
-    <a href="delivery.html">Delivery</a>
-    <a href="cart.html">Cart</a>
+    <a href="userProfile">Orders</a>
+    <a href="cart.jsp">Cart</a>
     <a href="logIn.html">Log in</a>
     <a href="signUp.html">Sign up</a>
   </div>
@@ -222,7 +221,6 @@ List<Restaurant> restaurants = (List<Restaurant>)request.getAttribute("topThreeR
       <div class="chip"><span class="emoji">🍰</span> Desserts</div>
       <div class="chip"><span class="emoji">🥘</span> South Indian</div>
       <div class="chip"><span class="emoji">🌮</span> Mexican</div>
-      <div class="chip"><span class="emoji">☕</span> Cafe</div>
     </div>
   </div>
 </section>
@@ -240,15 +238,14 @@ List<Restaurant> restaurants = (List<Restaurant>)request.getAttribute("topThreeR
 
        <div class="rest-grid">
 
-
 	<% 
 	for( Restaurant restaurant: restaurants){
     boolean open = restaurant.isActive();
 
 	%>
 	
-      <article class="rest-card">
-        <div class="rest-thumb" style="background:<%= restaurant.getImagePath()%>;">
+      <a href="menuServlet?restaurantId=<%= restaurant.getRestaurantId() %>" class="rest-card" style="display:block;">
+        <div class="rest-thumb" data-img="<%= request.getContextPath() + "/" + restaurant.getImagePath() %>">
         
           <span class="badge"><%= open ? "Open" : "Closed" %></span>
           <span class="fav"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></span>
@@ -256,18 +253,19 @@ List<Restaurant> restaurants = (List<Restaurant>)request.getAttribute("topThreeR
         </div>
         <div class="rest-perf"></div>
         <div class="rest-body">
-          <h3><%= restaurant.getName() %> </h3>
+          <div class="rest-name-row">
+            <h3><%= restaurant.getName() %></h3>
+            <span class="rating-badge"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.9L5.8 21l1.6-7L2 9.2l7.1-.6z"/></svg><%= restaurant.getRating() %></span>
+          </div>
           <div class="rest-meta">
-            <span class="rating"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.9L5.8 21l1.6-7L2 9.2l7.1-.6z"/></svg> <%= restaurant.getRating() %></span>
             <span>· <%= restaurant.getCuisineType() %> </span>
           </div>
           <div class="rest-tags"><%= restaurant.getAddress() %></div>
           <div class="rest-footer">
-            <span class="cost">₹300 for two</span>
-            <span class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            <span class="cost">View Restaurant</span>
           </div>
         </div>
-      </article>
+      </a>
 	
 	<%
 		} 
@@ -321,7 +319,7 @@ List<Restaurant> restaurants = (List<Restaurant>)request.getAttribute("topThreeR
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="index.html" class="logo">FoodHub<span class="dot">.</span></a>
+        <a href="topRestaurant" class="logo">FoodHub<span class="dot">.</span></a>
         <p>Bringing your city's best kitchens to your door — one ticket at a time.</p>
         <div class="footer-socials">
           <span class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></span>
@@ -341,8 +339,8 @@ List<Restaurant> restaurants = (List<Restaurant>)request.getAttribute("topThreeR
         <h4>For you</h4>
         <ul>
           <li><a href="allRestaurants">Browse restaurants</a></li>
-          <li><a href="orders.html">Your orders</a></li>
-          <li><a href="cart.html">Your cart</a></li>
+          <li><a href="userProfile">Your orders</a></li>
+          <li><a href="cart.jsp">Your cart</a></li>
         </ul>
       </div>
       <div>
@@ -364,6 +362,13 @@ List<Restaurant> restaurants = (List<Restaurant>)request.getAttribute("topThreeR
 <script>
   // ---- Theme toggle (persists via localStorage; swap for a server-side
   // preference later if you want it tied to a logged-in user) ----
+  // ==========================================================================
+// FOODHUB — THEME TOGGLE & INTERACTIONS
+// ==========================================================================
+
+document.addEventListener('DOMContentLoaded', function() {
+  
+  // ---- Theme Toggle ----
   const root = document.documentElement;
   const themeToggle = document.getElementById('themeToggle');
   const themeIcon = document.getElementById('themeIcon');
@@ -371,33 +376,194 @@ List<Restaurant> restaurants = (List<Restaurant>)request.getAttribute("topThreeR
   function applyTheme(theme) {
     root.setAttribute('data-theme', theme);
     localStorage.setItem('foodhub-theme', theme);
-    themeIcon.innerHTML = theme === 'dark'
-      ? '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>'
-      : '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+    
+    // Update icon
+    if (theme === 'dark') {
+      themeIcon.innerHTML = '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>';
+    } else {
+      themeIcon.innerHTML = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+    }
   }
 
-  const saved = localStorage.getItem('foodhub-theme') ||
+  // Load saved theme or system preference
+  const savedTheme = localStorage.getItem('foodhub-theme') ||
     (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  applyTheme(saved);
+  applyTheme(savedTheme);
 
-  themeToggle.addEventListener('click', () => {
-    applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-  });
+  // Toggle theme on button click
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function() {
+      const currentTheme = root.getAttribute('data-theme');
+      applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+    });
+  }
 
-  // ---- Profile dropdown ----
+  // ---- Profile Dropdown ----
   const profileWrap = document.getElementById('profileWrap');
   const profileBtn = document.getElementById('profileBtn');
-  profileBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    profileWrap.classList.toggle('open');
-  });
-  document.addEventListener('click', () => profileWrap.classList.remove('open'));
 
-  // ---- Mobile menu ----
+  if (profileBtn && profileWrap) {
+    profileBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      profileWrap.classList.toggle('open');
+    });
+
+    document.addEventListener('click', function() {
+      profileWrap.classList.remove('open');
+    });
+  }
+
+  // ---- Mobile Menu ----
   const mobileMenu = document.getElementById('mobileMenu');
-  document.getElementById('mobileOpen').addEventListener('click', () => mobileMenu.classList.add('open'));
-  document.getElementById('mobileClose').addEventListener('click', () => mobileMenu.classList.remove('open'));
-  mobileMenu.addEventListener('click', (e) => { if (e.target === mobileMenu) mobileMenu.classList.remove('open'); });
+  const mobileOpen = document.getElementById('mobileOpen');
+  const mobileClose = document.getElementById('mobileClose');
+
+  if (mobileOpen && mobileMenu) {
+    mobileOpen.addEventListener('click', function() {
+      mobileMenu.style.display = '';
+      mobileMenu.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  }
+
+  if (mobileClose && mobileMenu) {
+    mobileClose.addEventListener('click', function() {
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  }
+
+  if (mobileMenu) {
+    mobileMenu.addEventListener('click', function(e) {
+      if (e.target === mobileMenu) {
+        mobileMenu.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    });
+  }
+
+  // ---- Restaurant Image Loading with Fallback ----
+  const FALLBACK_GRADIENTS = [
+    'linear-gradient(135deg, #e8281a, #f59f00)',
+    'linear-gradient(135deg, #2b8a3e, #8cc98c)',
+    'linear-gradient(135deg, #e03131, #f59f00)',
+    'linear-gradient(135deg, #1c7ed6, #74c0fc)',
+    'linear-gradient(135deg, #7048e8, #b197fc)'
+  ];
+
+  document.querySelectorAll('.rest-thumb[data-img]').forEach(function(el, idx) {
+    const raw = el.getAttribute('data-img');
+    
+    // Handle empty or null values
+    if (!raw || raw === 'null' || raw === 'undefined' || raw.trim() === '') {
+      el.style.backgroundImage = FALLBACK_GRADIENTS[idx % FALLBACK_GRADIENTS.length];
+      el.classList.add('loaded');
+      return;
+    }
+
+    // Normalize path and encode
+    const normalized = raw.replace(/\\/g, '/');
+    const parts = normalized.split('/');
+    const encoded = parts.map(function(s) { return encodeURIComponent(s); }).join('/');
+    const url = encoded.startsWith('http') ? encoded : encoded;
+
+    const img = new Image();
+    
+    img.onload = function() {
+      el.style.backgroundImage = 'url("' + url + '")';
+      el.classList.add('loaded');
+    };
+    
+    img.onerror = function() {
+      el.style.backgroundImage = FALLBACK_GRADIENTS[idx % FALLBACK_GRADIENTS.length];
+      el.classList.add('loaded');
+    };
+    
+    img.src = url;
+  });
+
+  // ---- Payment Method Selection ----
+  const paymentOptions = document.querySelectorAll('.payment-option');
+  
+  paymentOptions.forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      // Remove selected class from all
+      paymentOptions.forEach(function(o) { o.classList.remove('selected'); });
+      
+      // Add selected class to clicked
+      this.classList.add('selected');
+      
+      // Check the radio button
+      const radio = this.querySelector('input[type="radio"]');
+      if (radio) radio.checked = true;
+
+      // Show/hide extra fields
+      document.querySelectorAll('.payment-extra').forEach(function(el) {
+        el.classList.remove('show');
+      });
+      
+      const mode = radio ? radio.value : '';
+      const extra = document.getElementById('extra-' + mode);
+      if (extra) extra.classList.add('show');
+    });
+  });
+
+  // ---- Delete Confirmation Popup ----
+  let pendingDeleteForm = null;
+  const deletePopup = document.getElementById('deletePopup');
+
+  // Make showDeletePopup globally accessible
+  window.showDeletePopup = function(btn) {
+    pendingDeleteForm = btn.closest('form');
+    if (deletePopup) deletePopup.classList.add('open');
+  };
+
+  if (deletePopup) {
+    const confirmYes = document.getElementById('deleteConfirmYes');
+    const confirmNo = document.getElementById('deleteConfirmNo');
+
+    if (confirmYes) {
+      confirmYes.addEventListener('click', function() {
+        if (pendingDeleteForm) pendingDeleteForm.submit();
+      });
+    }
+
+    if (confirmNo) {
+      confirmNo.addEventListener('click', function() {
+        pendingDeleteForm = null;
+        deletePopup.classList.remove('open');
+      });
+    }
+
+    deletePopup.addEventListener('click', function(e) {
+      if (e.target === deletePopup) {
+        pendingDeleteForm = null;
+        deletePopup.classList.remove('open');
+      }
+    });
+  }
+
+  // ---- Smooth Card Hover Effects ----
+  document.querySelectorAll('.rest-card').forEach(function(card) {
+    card.addEventListener('mouseenter', function() {
+      this.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
+    });
+  });
+
+  // ---- Auto-close mobile menu on resize ----
+  let resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      if (window.innerWidth > 720 && mobileMenu) {
+        mobileMenu.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    }, 250);
+  });
+
+  console.log('🍔 FoodHub — Elegant theme loaded successfully!');
+});
 </script>
 </body>
 </html>

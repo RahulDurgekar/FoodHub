@@ -7,23 +7,31 @@ public class Order {
     private int orderId;
     private int userId;
     private int restaurantId;
+    private Timestamp orderDate;
     private double totalAmount;
     private String status;
-    private Timestamp orderDate;
+    private String paymentMethod;
 
     public Order() {
     }
 
-    public Order(int orderId, int userId, int restaurantId,
-                 double totalAmount, String status,
-                 Timestamp orderDate) {
+    public Order(int userId, int restaurantId, Timestamp orderDate, double totalAmount, String status, String paymentMethod) {
+        this.userId = userId;
+        this.restaurantId = restaurantId;
+        this.orderDate = orderDate;
+        this.totalAmount = totalAmount;
+        this.status = status;
+        this.paymentMethod = paymentMethod;
+    }
 
+    public Order(int orderId, int userId, int restaurantId, Timestamp orderDate, double totalAmount, String status, String paymentMethod) {
         this.orderId = orderId;
         this.userId = userId;
         this.restaurantId = restaurantId;
+        this.orderDate = orderDate;
         this.totalAmount = totalAmount;
         this.status = status;
-        this.orderDate = orderDate;
+        this.paymentMethod = paymentMethod;
     }
 
     public int getOrderId() {
@@ -50,6 +58,14 @@ public class Order {
         this.restaurantId = restaurantId;
     }
 
+    public Timestamp getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(Timestamp orderDate) {
+        this.orderDate = orderDate;
+    }
+
     public double getTotalAmount() {
         return totalAmount;
     }
@@ -66,18 +82,18 @@ public class Order {
         this.status = status;
     }
 
-    public Timestamp getOrderDate() {
-        return orderDate;
+    public String getPaymentMethod() {
+        return paymentMethod;
     }
 
-    public void setOrderDate(Timestamp orderDate) {
-        this.orderDate = orderDate;
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
     @Override
     public String toString() {
-        return "Order orderId: " + orderId +
-                ", totalAmount: " + totalAmount +
-                ", status: " + status + "";
+        return "Order [orderId=" + orderId + ", userId=" + userId + ", restaurantId=" + restaurantId + ", orderDate="
+                + orderDate + ", totalAmount=" + totalAmount + ", status=" + status + ", paymentMethod="
+                + paymentMethod + "]";
     }
-}
+}

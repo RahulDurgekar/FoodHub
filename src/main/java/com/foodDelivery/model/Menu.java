@@ -7,7 +7,6 @@ public class Menu {
     private String itemName;
     private String description;
     private double price;
-    private String category;
     private boolean available;
     private String imagePath;
 
@@ -16,7 +15,7 @@ public class Menu {
 
     public Menu(int menuId, int restaurantId, String itemName,
                 String description, double price,
-                String category, boolean available,
+                boolean available,
                 String imagePath) {
 
         this.menuId = menuId;
@@ -24,10 +23,22 @@ public class Menu {
         this.itemName = itemName;
         this.description = description;
         this.price = price;
-        this.category = category;
         this.available = available;
         this.imagePath = imagePath;
     }
+    
+    public Menu(int restaurantId, String itemName,
+            String description, double price,
+            boolean available,
+            String imagePath) {
+
+    this.restaurantId = restaurantId;
+    this.itemName = itemName;
+    this.description = description;
+    this.price = price;
+    this.available = available;
+    this.imagePath = imagePath;
+}
 
     public int getMenuId() {
         return menuId;
@@ -67,14 +78,6 @@ public class Menu {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public boolean isAvailable() {

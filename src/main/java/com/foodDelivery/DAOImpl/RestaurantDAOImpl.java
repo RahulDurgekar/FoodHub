@@ -111,8 +111,9 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 
             if (rs.next()) {
             	restaurant = new Restaurant(
-                        rs.getString("name"),
-                        rs.getString("cuisineType"),
+            			    rs.getInt("restaurantId"),
+            			    rs.getString("name"),
+            			    rs.getString("cuisineType"),
                         rs.getInt("deliveryTime"),
                         rs.getString("address"),
                         rs.getDouble("rating"),
@@ -141,7 +142,7 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 				Restaurant restaurant=new Restaurant(
 						//Create Restaurant object directly by
 						//passing parameters to constructor by getting them from DB
-						
+						rs.getInt("restaurantId"),
 						rs.getString("name"),
                         	rs.getString("cuisineType"),
                         	rs.getInt("deliveryTime"),
@@ -176,7 +177,7 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 				Restaurant restaurant=new Restaurant(
 						//Create Restaurant object directly by
 						//passing parameters to constructor by getting them from DB
-						
+						rs.getInt("restaurantId"),
 						rs.getString("name"),
                         	rs.getString("cuisineType"),
                         	rs.getInt("deliveryTime"),
@@ -212,7 +213,7 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 				Restaurant activeRestaurant=new Restaurant(
 						//Create Restaurant object directly by
 						//passing parameters to constructor by getting them from DB
-						
+						rs.getInt("restaurantId"),
 						rs.getString("name"),
                         	rs.getString("cuisineType"),
                         	rs.getInt("deliveryTime"),

@@ -1,6 +1,8 @@
 package com.foodDelivery.Servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
 
 import com.foodDelivery.DAOImpl.RestaurantDAOImpl;
 import com.foodDelivery.model.Restaurant;
@@ -18,6 +20,7 @@ public class AddRestaurantServlet extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
+	 	PrintWriter out = resp.getWriter();
 		HttpSession session = req.getSession(false);
 
 		User user = (User) session.getAttribute("loggedUser");
@@ -36,7 +39,7 @@ public class AddRestaurantServlet extends HttpServlet{
 		RestaurantDAOImpl rsd= new RestaurantDAOImpl();
 		rsd.addRestaurant(restaurant);
 		
-		
+		out.print("Restaurant added succesfully");
 		resp.sendRedirect("restaurantAdminServlet");
 		
 		

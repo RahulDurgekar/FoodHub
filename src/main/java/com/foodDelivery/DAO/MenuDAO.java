@@ -12,4 +12,5 @@ public interface MenuDAO {
     List<Menu> getAvailableMenuItems(int restaurantId);
     void updateMenuItem(Menu menu);
     void deleteMenuItem(int menuId);
+    
 }

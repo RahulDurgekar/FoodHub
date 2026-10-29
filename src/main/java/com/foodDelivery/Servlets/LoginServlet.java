@@ -31,12 +31,9 @@ public class LoginServlet extends HttpServlet{
 		//HttpSession session;
 		
 		PrintWriter out = resp.getWriter();
+		
 		if(user.getEmail().equals(email) && BCrypt.checkpw(password, user.getPassword())) {
 			
-			HttpSession oldSession = req.getSession(false);
-            if (oldSession != null) {
-                oldSession.invalidate();
-            }
             
             HttpSession session = req.getSession(true);
             session.setAttribute("loggedUser", user);

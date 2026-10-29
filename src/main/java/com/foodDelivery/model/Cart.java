@@ -1,71 +1,108 @@
 package com.foodDelivery.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Cart {
-
-    private int cartId;
-    private int userId;
-    private int menuId;
-    private int quantity;
-    private double totalPrice;
-
+    
+    private Map<Integer, CartItem> items;
+    private int restaurantId; // Track which restaurant's items are in cart
+    
     public Cart() {
+        items = new HashMap<Integer, CartItem>();
+        restaurantId = 0;
     }
+    
+    // Add item to cart
+    public void addItem(CartItem item) {
+        // If item is from a different restaurant, reset cart first
+        if (restaurantId != 0 && restaurantId != item.getRestaurantId()) {
+            items.clear();
+            restaurantId = item.getRestaurantId();
+        }
 
-    public Cart(int cartId, int userId, int menuId,
-                int quantity, double totalPrice) {
-
-        this.cartId = cartId;
-        this.userId = userId;
-        this.menuId = menuId;
-        this.quantity = quantity;
-        this.totalPrice = totalPrice;
+        int menuId = item.getMenuId();
+        
+        if (items.containsKey(menuId)) {
+            // Item exists - update quantity
+            CartItem existingItem = items.get(menuId);
+            existingItem.setQty(existingItem.getQty() + item.getQty());
+        } else {
+            // New item - add to cart
+            items.put(menuId, item);
+            // Set the restaurant ID for the cart
+            if (restaurantId == 0) {
+                restaurantId = item.getRestaurantId();
+            }
+        }
     }
-
-    public int getCartId() {
-        return cartId;
+    
+    // Update item quantity
+    public void updateItemQty(int menuId, int newQty) {
+        if (items.containsKey(menuId)) {
+            if (newQty <= 0) {
+                items.remove(menuId);
+            } else {
+                items.get(menuId).setQty(newQty);
+            }
+        }
+        // If cart becomes empty, reset restaurantId
+        if (items.isEmpty()) {
+            restaurantId = 0;
+        }
     }
-
-    public void setCartId(int cartId) {
-        this.cartId = cartId;
+    
+    // Remove item from cart
+    public void removeItem(int menuId) {
+        items.remove(menuId);
+        if (items.isEmpty()) {
+            restaurantId = 0;
+        }
     }
-
-    public int getUserId() {
-        return userId;
+    
+    // Clear entire cart
+    public void clearCart() {
+        items.clear();
+        restaurantId = 0;
     }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
+    
+    // Get all items
+    public Map<Integer, CartItem> getItems() {
+        return items;
     }
-
-    public int getMenuId() {
-        return menuId;
+    
+    // Get total items count
+    public int getTotalItems() {
+        int count = 0;
+        for (CartItem item : items.values()) {
+            count += item.getQty();
+        }
+        return count;
     }
-
-    public void setMenuId(int menuId) {
-        this.menuId = menuId;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
+    
+    // Get total price
     public double getTotalPrice() {
-        return totalPrice;
+        double total = 0;
+        for (CartItem item : items.values()) {
+            total += item.getPrice() * item.getQty();
+        }
+        return total;
     }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
+    
+    public int getRestaurantId() {
+        return restaurantId;
     }
-
+    
+    public void setRestaurantId(int restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+    
+    public boolean isEmpty() {
+        return items.isEmpty();
+    }
+    
     @Override
     public String toString() {
-        return "Cart cartId: " + cartId +
-                ", menuId: " + menuId +
-                ", quantity: " + quantity +
-                ", totalPrice: " + totalPrice + "";
+        return "Cart [items=" + items + ", restaurantId=" + restaurantId + "]";
     }
 }

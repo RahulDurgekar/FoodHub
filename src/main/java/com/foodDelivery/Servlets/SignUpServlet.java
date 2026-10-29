@@ -25,7 +25,7 @@ public class SignUpServlet extends HttpServlet{
 		long phone = Long.parseLong(req.getParameter("phone"));
 		String address=req.getParameter("address");
 		String role = req.getParameter("role");
-		String password=BCrypt.hashpw(req.getParameter("password"), BCrypt.gensalt());
+		String password=BCrypt.hashpw(req.getParameter("password"), BCrypt.gensalt(12));
 		
 		User user=new User();
 		user.setName(name);

@@ -35,10 +35,7 @@ public class RestaurantAdminServlet extends HttpServlet{
 		RestaurantDAOImpl rd = new RestaurantDAOImpl();
 
 		List<Restaurant> restaurants = rd.getRestaurantByOwnerId((user.getUserId()));
-		System.out.println("User id "+ user.getUserId());
-		
-		System.out.println("Restaurants fetched: " + restaurants.size());
-		
+				
 		req.setAttribute("ownerRestaurants", restaurants);
 		RequestDispatcher rqd = req.getRequestDispatcher("RestaurantAdminDashboard.jsp");
 		rqd.forward(req, resp);
